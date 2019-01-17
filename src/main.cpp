@@ -11,13 +11,14 @@ void onHomieEvent(const HomieEvent & event) {
   }
 }
 
-// LED_BUILTIN is connected to GPIO1, which is TXD, too. So either use LED or serial console.
 void setup() {
     Serial.begin(115200);
     Serial << endl << endl;
 
     Homie_setFirmware("temp-esp8266", "0.9.0");
     Homie.setResetTrigger(PIN_BUTTON, LOW, 5000);
+    // LED_BUILTIN is connected to GPIO1, which is TXD, too. So either use LED or serial console.
+    Homie.disableLedFeedback();
 
     Homie.onEvent(onHomieEvent);
     Homie.setup();
