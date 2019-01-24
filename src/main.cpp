@@ -24,6 +24,9 @@ void onHomieEvent(const HomieEvent & event) {
       Homie.prepareToSleep();
       break;
     case HomieEventType::READY_TO_SLEEP:
+      // TODO synchronize Homie status interval, BME280Node interval and sleep time.
+      // TODO wire from GPIO16 to RST
+      // TODO remove LEDs
       Homie.getLogger() << "Ready to sleep for " << ESP.deepSleepMax() << endl;
       // microseconds
       Homie.doDeepSleep(1000000UL);
