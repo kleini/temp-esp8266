@@ -15,10 +15,9 @@
 #include <Wire.h>
 
 #include <Homie.hpp>
-#include "constants.hpp"
 
-class BME280Node : public HomieNode
-{
+class BME280Node : public HomieNode {
+
 private:
   // suggested rate is 1/60Hz (1m)
   static const int MIN_INTERVAL = 60; // in seconds
@@ -32,6 +31,9 @@ private:
   unsigned long _lastMeasurement;
 
   Adafruit_BME280 bme;
+  float temperature = NAN;
+  float humidity = NAN;
+  float pressure = NAN;
 
   void printCaption();
 
@@ -49,9 +51,4 @@ public:
 protected:
   virtual void setup() override;
   virtual void loop() override;
-
-private:
-  float temperature = NAN;
-  float humidity = NAN;
-  float pressure = NAN;
 };
