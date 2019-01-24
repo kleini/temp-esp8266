@@ -1,3 +1,4 @@
+#if WITH_OTA
 #ifndef SRC_OTA_H
 #define SRC_OTA_H
 
@@ -11,3 +12,4 @@ void otaLoop();
 
 
 #endif /* end of include guard: SRC_OTA_H */
+#endif

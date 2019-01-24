@@ -44,7 +44,9 @@ void setupHandler() {
 
 void loopHandler() {
   // We want to OTA handler to run only in the loop when WiFi is connected
+#if WITH_OTA
   otaLoop();
+#endif
 }
 
 void setup() {
@@ -60,7 +62,9 @@ void setup() {
   Homie.disableLedFeedback();
 
   Homie.onEvent(onHomieEvent);
+#if WITH_OTA
   otaSetup(OTA_PORT, OTA_PASS);
+#endif
 
   Homie.setSetupFunction(setupHandler);
   Homie.setLoopFunction(loopHandler);

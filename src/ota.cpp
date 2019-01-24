@@ -4,6 +4,8 @@
 // OTA
 // -----------------------------------------------------------------------------
 
+#if WITH_OTA
+
 void otaSetup(uint16_t port, const char *password) {
 
     ArduinoOTA.setPort(port);
@@ -42,3 +44,4 @@ void otaSetup(uint16_t port, const char *password) {
 void otaLoop() {
     ArduinoOTA.handle();
 }
+#endif
