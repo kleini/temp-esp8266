@@ -1,5 +1,5 @@
 #define FW_NAME "temp-esp8266"
-#define FW_VERSION "0.9.1"
+#define FW_VERSION "0.9.2"
 
 const int PIN_SDA = 0;
 const int PIN_SCL = 2;
@@ -11,35 +11,23 @@ const int I2C_BME280_ADDRESS = 0x76;
 #include <Homie.h>
 #include "ota.hpp"
 #include "BME280Node.hpp"
-#include <Int64String.h>
 
 BME280Node bme280Node("bme280", I2C_BME280_ADDRESS);
 
 void onHomieEvent(const HomieEvent & event) {
   switch (event.type) {
-    case HomieEventType::WIFI_DISCONNECTED:
-      WiFi.disconnect();
-      break;
     case HomieEventType::MQTT_READY:
-      Homie.getLogger() << "MQTT connected, preparing for deep sleep..." << endl;
       Homie.prepareToSleep();
       break;
     case HomieEventType::READY_TO_SLEEP:
       // TODO synchronize Homie status interval, BME280Node interval and sleep time.
       // TODO wire from GPIO16 to RST
       // TODO remove LEDs
-      Homie.getLogger() << "Ready to sleep for " << int64String(ESP.deepSleepMax()) << endl;
-      // microseconds
-      Homie.doDeepSleep(1000000UL);
+      Homie.doDeepSleep(60*1000000);
       break;
     default:
       break;
   }
-}
-
-void setupHandler() {
-  // advertise units
-  bme280Node.setupHandler();
 }
 
 void loopHandler() {
@@ -65,8 +53,6 @@ void setup() {
 #if WITH_OTA
   otaSetup(OTA_PORT, OTA_PASS);
 #endif
-
-  Homie.setSetupFunction(setupHandler);
   Homie.setLoopFunction(loopHandler);
 
   Homie.setup();
