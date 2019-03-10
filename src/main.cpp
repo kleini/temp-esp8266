@@ -9,7 +9,7 @@ const int I2C_BME280_ADDRESS = 0x77;
 #include "BME280Node.hpp"
 #include "Timer.h"
 
-BME280Node bme280Node("bme280", I2C_BME280_ADDRESS, 60);
+BME280Node bme280Node("bme280", I2C_BME280_ADDRESS, 60, Adafruit_BME280::SAMPLING_X16, Adafruit_BME280::SAMPLING_X16, Adafruit_BME280::SAMPLING_X16);
 Timer t;
 
 void prepareSleep() {
@@ -19,7 +19,7 @@ void prepareSleep() {
 void onHomieEvent(const HomieEvent & event) {
   switch (event.type) {
     case HomieEventType::MQTT_READY:
-      t.after(500, prepareSleep);
+      t.after(100, prepareSleep);
       break;
     case HomieEventType::READY_TO_SLEEP:
       Homie.doDeepSleep(60000000UL);
@@ -32,6 +32,8 @@ void onHomieEvent(const HomieEvent & event) {
 void setup() {
   Serial.begin(115200);
   Serial << endl << endl;
+
+  WiFi.forceSleepWake();
 
   Wire.begin(PIN_SDA, PIN_SCL);
 
