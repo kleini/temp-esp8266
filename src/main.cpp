@@ -1,8 +1,12 @@
 #define FW_NAME "temp-esp8266"
-#define FW_VERSION "0.9.2"
+#define FW_VERSION "0.9.3"
 
 const int PIN_SDA = 0;
 const int PIN_SCL = 2;
+
+// GY-BME280
+// const int I2C_BME280_ADDRESS = 0x76;
+// Adafruit BME280
 const int I2C_BME280_ADDRESS = 0x77;
 
 #include <Homie.h>
@@ -24,6 +28,9 @@ void onHomieEvent(const HomieEvent & event) {
     case HomieEventType::READY_TO_SLEEP:
       Homie.doDeepSleep(60000000UL);
       break;
+//    case HomieEventType::MQTT_PACKET_ACKNOWLEDGED:
+//      Homie.getLogger() << "MQTT packet ack " << event.packetId << endl;
+//      break;
     default:
       break;
   }
@@ -42,9 +49,8 @@ void setup() {
   Homie.disableResetTrigger();
   // LED_BUILTIN is connected to GPIO1, which is TXD, too. So either use LED or serial console.
   Homie.disableLedFeedback();
-
   Homie.onEvent(onHomieEvent);
-
+  bme280Node.beforeHomieSetup();
   Homie.setup();
 }
 
